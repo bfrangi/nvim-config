@@ -178,6 +178,15 @@ vim.api.nvim_create_autocmd("BufWritePost", {
 	pattern = vim.fn.expand("$MYVIMRC"),
 })
 
+-- [[ Custom Functions ]]
+local function map(mode, lhs, rhs, opts)
+  local options = { noremap=true, silent=true }
+  if opts then
+    options = vim.tbl_extend('force', options, opts)
+  end
+  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+end
+
 -- [[ Setting options ]]
 -- See `:help vim.o`
 
@@ -249,6 +258,35 @@ vim.g.maplocalleader = " "
 local options = { noremap = true }
 vim.keymap.set("i", "jk", "<Esc>", options)
 vim.keymap.set("i", "kj", "<Esc>", options)
+
+-- Remap tabpage switching
+map('n', '<M-q>', '<cmd>tabclose<cr>')
+map('n', '<M-w>', '<cmd>tabnew %<cr>')
+map('n', '<M-t>', '<cmd>tabnew<cr>')
+map('n', '<M-s>', '<cmd>tabnext<cr>')
+map('n', '<M-a>', '<cmd>tabprevious<cr>')
+
+-- Change split orientation
+map('n', '<leader>th', '<C-w>t<C-w>K') -- change vertical to horizontal
+map('n', '<leader>tv', '<C-w>t<C-w>H') -- change horizontal to vertical
+
+-- Move around splits using Ctrl + {h,j,k,l}
+map('n', '<leader>h', '<C-w>h')
+map('n', '<leader>j', '<C-w>j')
+map('n', '<leader>k', '<C-w>k')
+map('n', '<leader>l', '<C-w>l')
+
+-- Reload configuration without restarting nvim
+map('n', '<leader>r', ':so %<CR>')
+
+-- Fast saving with <leader> and w
+map('n', '<leader>w', ':w<CR>')
+
+-- Close all windows and exit from Neovim with <leader> and q
+map('n', '<leader><leader>q', ':qa!<CR>')
+
+
+
 
 -- Make 4 sized tabs
 vim.opt.tabstop = 4
