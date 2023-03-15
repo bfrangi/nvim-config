@@ -77,8 +77,8 @@ require("packer").startup(function(use)
 	use("lewis6991/gitsigns.nvim")
 
   -- Theme
-	use("navarasu/onedark.nvim") -- Theme inspired by Atom
-	-- use("navarasu/onedark.nvim")
+	-- use("navarasu/onedark.nvim") -- Theme inspired by Atom
+	use("ellisonleao/gruvbox.nvim")
 
   use("nvim-lualine/lualine.nvim") -- Fancier statusline
 	use("lukas-reineke/indent-blankline.nvim") -- Add indentation guides even on blank lines
@@ -206,8 +206,32 @@ vim.o.updatetime = 250
 vim.wo.signcolumn = "yes"
 
 -- Set colorscheme
-vim.o.termguicolors = true
-vim.cmd([[colorscheme onedark]])
+-- vim.o.termguicolors = true
+-- vim.cmd([[colorscheme gruvbox]])
+
+vim.o.background = "dark" -- or "light" for light mode
+vim.cmd([[colorscheme gruvbox]])
+-- setup must be called before loading the colorscheme
+-- Default options:
+require("gruvbox").setup({
+  undercurl = true,
+  underline = true,
+  bold = true,
+  italic = true,
+  strikethrough = true,
+  invert_selection = false,
+  invert_signs = false,
+  invert_tabline = false,
+  invert_intend_guides = false,
+  inverse = true, -- invert background for search, diffs, statuslines and errors
+  contrast = "", -- can be "hard", "soft" or empty string
+  palette_overrides = {},
+  overrides = {},
+  dim_inactive = false,
+  transparent_mode = false,
+})
+vim.cmd("colorscheme gruvbox")
+
 -- vim.api.nvim_set_hl(0, "Normal", { bg = "none" })
 -- vim.api.nvim_set_hl(0, "NormalFloat", { bg = "none" })
 
@@ -333,7 +357,7 @@ require("transparent").setup({
 require('lualine').setup {
   options = {
     icons_enabled = true,
-    theme = 'onedark',
+    theme = 'gruvbox',
     component_separators = { left = '', right = ''},
     section_separators = { left = '', right = ''},
     disabled_filetypes = {
