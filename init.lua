@@ -76,8 +76,11 @@ require("packer").startup(function(use)
 	use("tpope/vim-rhubarb")
 	use("lewis6991/gitsigns.nvim")
 
+  -- Theme
 	use("navarasu/onedark.nvim") -- Theme inspired by Atom
-	use("nvim-lualine/lualine.nvim") -- Fancier statusline
+	-- use("navarasu/onedark.nvim")
+
+  use("nvim-lualine/lualine.nvim") -- Fancier statusline
 	use("lukas-reineke/indent-blankline.nvim") -- Add indentation guides even on blank lines
 	use("numToStr/Comment.nvim") -- "gc" to comment visual regions/lines
 	use("tpope/vim-sleuth") -- Detect tabstop and shiftwidth automatically
@@ -137,7 +140,10 @@ require("packer").startup(function(use)
 	-- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make", cond = vim.fn.executable("make") == 1 })
 
-	-- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
+  -- Beacon plugin
+  use({"danilamihailov/beacon.nvim"})
+
+  -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
 	local has_plugins, plugins = pcall(require, "custom.plugins")
 	if has_plugins then
 		plugins(use)
@@ -321,14 +327,47 @@ require("transparent").setup({
 
 -- Set lualine as statusline
 -- See `:help lualine.txt`
-require("lualine").setup({
-	options = {
-		icons_enabled = false,
-		theme = "onedark",
-		component_separators = "|",
-		section_separators = "",
-	},
-})
+require('lualine').setup {
+  options = {
+    icons_enabled = true,
+    theme = 'onedark',
+    component_separators = { left = '', right = ''},
+    section_separators = { left = '', right = ''},
+    disabled_filetypes = {
+      statusline = {},
+      winbar = {},
+    },
+    ignore_focus = {},
+    always_divide_middle = true,
+    globalstatus = false,
+    refresh = {
+      statusline = 1000,
+      tabline = 1000,
+      winbar = 1000,
+    }
+  },
+  sections = {
+    lualine_a = {'mode'},
+    lualine_b = {'branch', 'diff', 'diagnostics'},
+    lualine_c = {'filename'},
+    lualine_x = {'encoding', 'fileformat', 'filetype'},
+    lualine_y = {'progress'},
+    lualine_z = {'location'}
+  },
+  inactive_sections = {
+    lualine_a = {},
+    lualine_b = {},
+    lualine_c = {'filename'},
+    lualine_x = {'location'},
+    lualine_y = {},
+    lualine_z = {}
+  },
+  tabline = {},
+  winbar = {},
+  inactive_winbar = {},
+  extensions = {}
+}
+
 
 -- Enable Comment.nvim
 require("Comment").setup()
@@ -369,7 +408,7 @@ require("telescope").setup({
 pcall(require("telescope").load_extension, "fzf")
 
 -- See `:help telescope.builtin`
-vim.keymap.set("n", "<leader>?", require("telescope.builtin").oldfiles, { desc = "[?] Find recently opened files" })
+vim.keymap.set("n", "<leader>rf", require("telescope.builtin").oldfiles, { desc = "[rf] Find recently opened files" })
 vim.keymap.set("n", "<leader><space>", require("telescope.builtin").buffers, { desc = "[ ] Find existing buffers" })
 vim.keymap.set("n", "<leader>/", function()
 	-- You can pass additional configuration to telescope to change theme, layout, etc.
