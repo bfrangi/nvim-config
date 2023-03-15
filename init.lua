@@ -140,13 +140,20 @@ require("packer").startup(function(use)
 	-- Fuzzy Finder Algorithm which requires local dependencies to be built. Only load if `make` is available
 	use({ "nvim-telescope/telescope-fzf-native.nvim", run = "make", cond = vim.fn.executable("make") == 1 })
 
-  -- Beacon plugin
-  use({"danilamihailov/beacon.nvim"})
+    -- Beacon plugin
+    use({"danilamihailov/beacon.nvim"})
 
-  -- Plugin to move bits of code
-  use ({"matze/vim-move"})
+    use {
+        "nvim-neo-tree/neo-tree.nvim",
+        branch = "v2.x",
+        requires = {
+          "nvim-lua/plenary.nvim",
+          "nvim-tree/nvim-web-devicons", -- not strictly required, but recommended
+          "MunifTanjim/nui.nvim",
+        }
+    }
 
-  -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
+    -- Add custom plugins to packer from ~/.config/nvim/lua/custom/plugins.lua
 	local has_plugins, plugins = pcall(require, "custom.plugins")
 	if has_plugins then
 		plugins(use)
@@ -198,7 +205,7 @@ vim.o.nu = true
 vim.o.relativenumber = true
 
 -- Enable mouse mode
-vim.o.mouse = "a"
+vim.o.mouse = "c"
 
 -- Enable break indent
 vim.o.breakindent = true
@@ -237,7 +244,7 @@ require("gruvbox").setup({
   palette_overrides = {},
   overrides = {},
   dim_inactive = false,
-  transparent_mode = false,
+  transparent_mode = true,
 })
 vim.cmd("colorscheme gruvbox")
 
@@ -255,9 +262,9 @@ vim.g.mapleader = " "
 vim.g.maplocalleader = " "
 
 -- Remap the ESC key
-local options = { noremap = true }
-vim.keymap.set("i", "jk", "<Esc>", options)
-vim.keymap.set("i", "kj", "<Esc>", options)
+-- local options = { noremap = true }
+-- vim.keymap.set("i", "jk", "<Esc>", options)
+-- vim.keymap.set("i", "kj", "<Esc>", options)
 
 -- Remap tabpage switching
 map('n', '<M-q>', '<cmd>tabclose<cr>')
@@ -286,7 +293,12 @@ map('n', '<leader>w', ':w<CR>')
 map('n', '<leader><leader>q', ':qa!<CR>')
 
 
+-- Terminal mappings
+map('n', '<C-t>', ':term<CR>', { noremap = true })  -- open
+-- map('t', '<Esc>', '<C-\\><C-n>')                    -- exit
 
+-- NvimTree
+map('n', '<C-n>', ':NeoTreeShow<CR>')            -- open/close
 
 -- Make 4 sized tabs
 vim.opt.tabstop = 4
@@ -378,13 +390,12 @@ require("transparent").setup({
 	extra_groups = { -- table/string: additional groups that should be cleared
 		-- In particular, when you set it to 'all', that means all available groups
 		-- "all",
-		-- example of akinsho/nvim-bufferline.lua
 		"BufferLineTabClose",
 		"BufferlineBufferSelected",
 		"BufferLineFill",
 		"BufferLineBackground",
 		"BufferLineSeparator",
-		"B:ufferLineIndicatorSelected",
+		"BufferLineIndicatorSelected",
 	},
 	exclude = {}, -- table: groups you don't want to clear
 	ignore_linked_group = true, -- boolean: don't clear a group that links to another group
